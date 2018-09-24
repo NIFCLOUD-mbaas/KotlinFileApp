@@ -18,7 +18,9 @@
 * Windows 7 Professional
 * Android Studio 1.5
 * Android ver 4x,5x
- * このサンプルアプリは、端末のカメラを使用するため、実機が必要です
+  - このサンプルアプリは、端末のカメラを使用するため、実機が必要です
+* Android SDK v3
+  - SDK v2系だと動作しないので注意
 
 ※上記内容で動作確認をしています
 
