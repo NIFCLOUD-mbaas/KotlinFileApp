@@ -16,7 +16,7 @@
 
 ## 動作環境
 * Windows 7 Professional
-* Android Studio 1.5
+* Android Studio 3.1
 * Android ver 4x,5x
   - このサンプルアプリは、端末のカメラを使用するため、実機が必要です
 * Android SDK v3
