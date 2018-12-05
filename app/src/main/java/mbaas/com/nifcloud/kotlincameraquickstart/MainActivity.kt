@@ -1,4 +1,4 @@
-package mbaas.com.nifcloud.ncmbcameraquickstart
+package mbaas.com.nifcloud.kotlincameraquickstart
 
 import android.Manifest
 import android.app.AlertDialog
