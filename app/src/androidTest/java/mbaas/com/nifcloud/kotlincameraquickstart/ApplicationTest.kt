@@ -1,4 +1,4 @@
-package mbaas.com.nifcloud.ncmbcameraquickstart
+package mbaas.com.nifcloud.kotlincameraquickstart
 
 import android.app.Application
 import android.test.ApplicationTestCase

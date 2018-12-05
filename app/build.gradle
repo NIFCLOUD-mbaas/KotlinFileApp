@@ -6,7 +6,7 @@ android {
 //    buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "mbaas.com.nifcloud.ncmbcameraquickstart"
+        applicationId "mbaas.com.nifcloud.kotlincameraquickstart"
         minSdkVersion 15
         targetSdkVersion 27
         versionCode 1
