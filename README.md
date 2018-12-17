@@ -47,7 +47,7 @@
 
 ### 2. サンプルプロジェクトのダウンロード
 * 下記リンクをクリックしてプロジェクトをダウンロードします
- * https://github.com/NiFCloud-mbaas/KotlinFileApp/archive/master.zip
+  * https://github.com/NiFCloud-mbaas/KotlinFileApp/archive/master.zip
 * ダウンロードしたプロジェクトを解凍します
 * AndroidStudio を開きます、「Open an existing Android Studio projct」をクリックして解凍したプロジェクトを選択します
 
@@ -93,12 +93,12 @@ dependencies {
 ![画像8](/readme-img/AndroidAPIkey.png)
 
 * それぞれ`YOUR_APP_KEY`と`YOUR_CLIENT_KEY`の部分を書き換えます
- * このとき、ダブルクォーテーション（`"`）を消さないように注意してください！
+  * このとき、ダブルクォーテーション（`"`）を消さないように注意してください！
 
 ### 5. 動作確認
 
 * エミュレーターでアプリをビルドします
- * 失敗する場合は一度「Clean Project」を実行してから再度ビルドしてください
+  * 失敗する場合は一度「Clean Project」を実行してから再度ビルドしてください
 * アプリが起動したら
   1. 「CAMERA」ボタンをタップして、写真を撮影します
   2. 「保存」ボタンをタップして、保存します
