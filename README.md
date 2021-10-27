@@ -15,8 +15,8 @@
 ![画像2](/readme-img/SdkTypes.png)
 
 ## 動作環境
-* Windows 7 Professional
-* Android Studio 3.1
+* MacOS Big Sur 11.6 
+* Android Studio Arctic Fox 2020.3.1
 * Android ver 4x,5x
   - このサンプルアプリは、端末のカメラを使用するため、実機が必要です
 * Android SDK v3
