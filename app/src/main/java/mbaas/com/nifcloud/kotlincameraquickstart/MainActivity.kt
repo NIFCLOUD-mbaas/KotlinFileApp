@@ -2,6 +2,7 @@ package mbaas.com.nifcloud.kotlincameraquickstart
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -22,8 +23,10 @@ import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
 import com.nifcloud.mbaas.core.NCMB
 import com.nifcloud.mbaas.core.NCMBAcl
+import com.nifcloud.mbaas.core.NCMBCallback
 import com.nifcloud.mbaas.core.NCMBFile
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
@@ -61,66 +64,85 @@ class MainActivity : AppCompatActivity() {
             val acl = NCMBAcl()
             acl.publicReadAccess = true
             acl.publicWriteAccess = true
-
-            //通信実施
-            val file = NCMBFile("test.png", dataByte, acl)
-            file.saveInBackground { e ->
-                val result: String
-                if (e != null) {
-                    //保存失敗
-                    AlertDialog.Builder(this@MainActivity)
+            val filename = "test.png"
+            this.openFileOutput(filename, Context.MODE_PRIVATE).use {
+                it.write(dataByte)
+            }
+            val file = File(this.filesDir, filename)
+            val fileObj = NCMBFile(filename)
+            fileObj.fileData = file
+            fileObj.setAcl(acl)
+            // ファイルストアへの登録を実施
+            fileObj.saveInBackground(NCMBCallback { e, ncmbFile ->
+                runOnUiThread {
+                    if (e != null) {
+                        // 保存失敗
+                        AlertDialog.Builder(this)
                             .setTitle("Notification from NIFCloud")
                             .setMessage("Error:" + e.message)
                             .setPositiveButton("OK", null)
                             .show()
-                } else {
-                    //******* NCMB file download *******
-                    val file = NCMBFile("test.png")
-                    file.fetchInBackground { dataFetch, er ->
-                        if (er != null) {
-                            //失敗処理
-                            AlertDialog.Builder(this@MainActivity)
-                                    .setTitle("Notification from NIFCloud")
-                                    .setMessage("Error:" + er.message)
-                                    .setPositiveButton("OK", null)
-                                    .show()
-                        } else {
-                            //成功処理
-                            val bMap = BitmapFactory.decodeByteArray(dataFetch, 0, dataFetch.size)
-                            iv?.setImageBitmap(bMap)
-                        }
+                    } else {
+                        //******* NCMB file download *******
+                        val fileObj = NCMBFile(filename)
+                        fileObj.fetchInBackground(NCMBCallback { er, ncmbFile ->
+                            runOnUiThread {
+                                if (er != null) {
+                                    // 失敗処理
+                                    AlertDialog.Builder(this)
+                                        .setTitle("Notification from NIFCloud")
+                                        .setMessage("Error:" + er.message)
+                                        .setPositiveButton("OK", null)
+                                        .show()
+                                } else {
+                                    val fileObj = ncmbFile as NCMBFile
+                                    //成功処理
+                                    val bMap = BitmapFactory.decodeByteArray(
+                                        fileObj.fileDownloadByte,
+                                        0,
+                                        fileObj.fileDownloadByte!!.size
+                                    )
+                                    iv?.setImageBitmap(bMap)
+
+
+                                }
+                            }
+
+                        })
                     }
-
-
                 }
-            }
+
+            })
         }
     }
 
     private fun requestCameraPermission() {
         Dexter.withActivity(this)
-                .withPermission(Manifest.permission.CAMERA)
-                .withListener(object : PermissionListener {
-                    override fun onPermissionGranted(response: PermissionGrantedResponse) {
-                        // permission is granted
-                        openCamera()
-                    }
+            .withPermission(Manifest.permission.CAMERA)
+            .withListener(object : PermissionListener {
+                override fun onPermissionGranted(response: PermissionGrantedResponse) {
+                    // permission is granted
+                    openCamera()
+                }
 
-                    override fun onPermissionDenied(response: PermissionDeniedResponse) {
-                        // check for permanent denial of permission
-                        if (response.isPermanentlyDenied) {
-                            showSettingsDialog()
-                        }
+                override fun onPermissionDenied(response: PermissionDeniedResponse) {
+                    // check for permanent denial of permission
+                    if (response.isPermanentlyDenied) {
+                        showSettingsDialog()
                     }
+                }
 
-                    override fun onPermissionRationaleShouldBeShown(permission: PermissionRequest, token: PermissionToken) {
-                        token.continuePermissionRequest()
-                    }
-                }).check()
+                override fun onPermissionRationaleShouldBeShown(
+                    permission: PermissionRequest,
+                    token: PermissionToken
+                ) {
+                    token.continuePermissionRequest()
+                }
+            }).check()
     }
 
     private fun showSettingsDialog() {
-        val builder = AlertDialog.Builder(this@MainActivity)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle("Need Permissions")
         builder.setMessage("This app needs permission to use this feature. You can grant them in app settings.")
         builder.setPositiveButton("GOTO SETTINGS") { dialog, which ->
